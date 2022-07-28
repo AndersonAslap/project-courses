@@ -6,88 +6,40 @@ import {
   HttpCode,
   HttpStatus,
   Param,
-  Patch,
   Post,
   Put,
-  Res,
 } from '@nestjs/common';
 
 import { CoursesService } from './courses.service';
-
-type CourseType = {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  active: boolean;
-  created_at: Date;
-  updated_at: Date;
-};
-
-let courses: CourseType[] = [];
 
 @Controller('courses')
 export class CoursesController {
   constructor(private readonly coursesServices: CoursesService) { }
 
   @Get()
-  findAll(@Res() response) {
-    return response.status(200).json(courses);
+  findAll() {
+    return this.coursesServices.findAll();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return courses.find((course) => course.id === id);
+    return this.coursesServices.findOne(id);
   }
 
   @Post()
   @HttpCode(HttpStatus.NO_CONTENT)
   create(@Body() body) {
-    const course = {
-      id: String(courses.length + 1),
-      active: true,
-      ...body,
-      created_at: new Date(),
-      updated_at: new Date(),
-    } as CourseType;
-    courses.push(course);
+    this.coursesServices.create(body);
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() body, @Res() response) {
-    const course = courses.find((course) => course.id === id);
-    const index = courses.indexOf(course);
-    const courseUpdated = {
-      id,
-      ...body,
-      created_at: course.created_at,
-      updated_at: new Date(),
-    };
-    courses[index] = courseUpdated;
-    return response.status(200).json(courseUpdated);
-  }
-
-  @Patch('active/:id')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  active(@Param('id') id: string) {
-    const course = courses.find((course) => course.id === id);
-    const index = courses.indexOf(course);
-
-    courses[index].active = true;
-  }
-
-  @Patch('desactive/:id')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  desactive(@Param('id') id: string) {
-    const course = courses.find((course) => course.id === id);
-    const index = courses.indexOf(course);
-
-    courses[index].active = false;
+  update(@Param('id') id: string, @Body() body: any) {
+    this.coursesServices.update(id, body);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   delete(@Param('id') id: string) {
-    courses = courses.filter((course) => course.id !== id);
+    this.coursesServices.delete(id);
   }
 }
