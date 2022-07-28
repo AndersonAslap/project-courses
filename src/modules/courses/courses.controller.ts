@@ -12,6 +12,8 @@ import {
   Res,
 } from '@nestjs/common';
 
+import { CoursesService } from './courses.service';
+
 type CourseType = {
   id: string;
   name: string;
@@ -26,6 +28,8 @@ let courses: CourseType[] = [];
 
 @Controller('courses')
 export class CoursesController {
+  constructor(private readonly coursesServices: CoursesService) { }
+
   @Get()
   findAll(@Res() response) {
     return response.status(200).json(courses);
