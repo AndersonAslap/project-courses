@@ -1,14 +1,23 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+
+const courses = [];
 
 @Controller('courses')
 export class CoursesController {
   @Get()
   findAll() {
-    return 'list all courses';
+    return courses;
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return `list one course - id : ${id}`;
+    return courses.find((course) => course.id === id);
+  }
+
+  @Post()
+  create(@Body() body) {
+    const course = { id: String(courses.length + 1), ...body };
+    courses.push(course);
+    return course;
   }
 }
