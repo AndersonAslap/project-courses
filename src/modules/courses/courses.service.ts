@@ -1,4 +1,11 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 import { Course } from './entities/course.entity';
@@ -7,30 +14,28 @@ import { Course } from './entities/course.entity';
 export class CoursesService {
   private courses: Course[] = [];
 
+  constructor(
+    @InjectRepository(Course)
+    private readonly courseRepository: Repository<Course>,
+  ) { }
+
   findAll() {
-    return this.courses;
+    return this.courseRepository.find();
   }
 
   findOne(id: string) {
-    const course = this.courses.find((course) => course.id === id);
+    /*const course = this.courseRepository.findOne({ where: { id: id } });
 
     if (!course) {
-      throw new HttpException('This course not found!', 404);
+      throw new NotFoundException('Course not found');
     }
 
-    return course;
+    return course;*/
   }
 
   create(createCourseDto: CreateCourseDto) {
-    const course = {
-      id: String(this.courses.length + 1),
-      active: true,
-      ...createCourseDto,
-      created_at: new Date(),
-      updated_at: new Date(),
-    };
-
-    this.courses.push(course);
+    const course = this.courseRepository.create(createCourseDto);
+    return this.courseRepository.save(course);
   }
 
   update(id: string, updateCourseDto: UpdateCourseDto) {

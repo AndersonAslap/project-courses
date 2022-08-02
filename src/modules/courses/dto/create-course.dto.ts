@@ -1,4 +1,4 @@
-import { IsNumber, IsString } from 'class-validator';
+import { IsBoolean, IsNumber, IsString } from 'class-validator';
 
 export class CreateCourseDto {
   @IsString()
@@ -9,4 +9,10 @@ export class CreateCourseDto {
 
   @IsNumber()
   readonly price: number;
+
+  @IsBoolean()
+  readonly active?: boolean;
+
+  @IsString({ each: true })
+  readonly tags: string[];
 }
