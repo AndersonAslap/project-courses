@@ -15,7 +15,7 @@ export class CoursesService {
   private courses: Course[] = [];
 
   constructor(
-    @InjectRepository(Course)
+    @Inject('COURSES_REPOSITORY')
     private readonly courseRepository: Repository<Course>,
   ) { }
 
@@ -24,13 +24,13 @@ export class CoursesService {
   }
 
   findOne(id: string) {
-    /*const course = this.courseRepository.findOne({ where: { id: id } });
+    const course = this.courseRepository.findOne({ where: { id: id } });
 
     if (!course) {
       throw new NotFoundException('Course not found');
     }
 
-    return course;*/
+    return course;
   }
 
   create(createCourseDto: CreateCourseDto) {

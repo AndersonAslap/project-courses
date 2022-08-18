@@ -3,7 +3,7 @@ import { Course } from './entities/course.entity';
 
 export const courseProviders = [
   {
-    provide: 'COURSE_REPOSITORY',
+    provide: 'COURSES_REPOSITORY',
     useFactory: (dataSource: DataSource) => dataSource.getRepository(Course),
     inject: ['DATA_SOURCE'],
   },
