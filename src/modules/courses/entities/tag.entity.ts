@@ -3,38 +3,23 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinTable,
   ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-
 import { v4 as uuidv4 } from 'uuid';
+import { Course } from './course.entity';
 
-import { Tag } from './tag.entity';
-
-@Entity('courses')
-export class Course {
+@Entity('tags')
+export class Tag {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
   name: string;
 
-  @Column()
-  description: string;
-
-  @Column()
-  price: number;
-
-  @Column({ default: true })
-  active: boolean;
-
-  @JoinTable()
-  @ManyToMany(() => Tag, (tag: Tag) => tag.courses, {
-    cascade: true,
-  })
-  tags: string[];
+  @ManyToMany(() => Course, (course) => course.tags)
+  courses: Course[];
 
   @CreateDateColumn({ type: 'timestamp' })
   created_at?: Date;
