@@ -16,7 +16,7 @@ import { UpdateCourseDto } from './dto/update-course.dto';
 
 @Controller('courses')
 export class CoursesController {
-  constructor(private readonly coursesServices: CoursesService) {}
+  constructor(private readonly coursesServices: CoursesService) { }
 
   @Get()
   findAll() {
@@ -29,9 +29,8 @@ export class CoursesController {
   }
 
   @Post()
-  @HttpCode(HttpStatus.NO_CONTENT)
   create(@Body() createCourseDto: CreateCourseDto) {
-    this.coursesServices.create(createCourseDto);
+    return this.coursesServices.create(createCourseDto);
   }
 
   @Put(':id')
