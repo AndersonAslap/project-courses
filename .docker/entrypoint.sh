@@ -2,5 +2,5 @@
 
 npm install 
 npm run build
-npx typeorm migration:run -d dist/databasa.providers.js
+npx typeorm migration:run -d dist/database/database.providers.js
 npm run start:dev
